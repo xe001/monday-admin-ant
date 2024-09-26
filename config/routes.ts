@@ -60,4 +60,16 @@ export default [
     layout: false,
     component: './404',
   },
+  {
+    path: '/test',
+    name: 'list.temporary',
+    icon: 'table',
+    component: './Temporary',
+  },
+  {
+    path: '/merchant-admin',
+    name: 'merchant-admin',
+    icon: 'table',
+    component: './MerchantAdmin/List',
+  },
 ];

@@ -41,4 +41,20 @@ export default {
       pathRewrite: { '^': '' },
     },
   },
+  local: {
+    '/api/': {
+      // 要代理的地址
+      target: 'http:api.monday.lc',
+      changeOrigin: true,
+      pathRewrite: { '^': '' },
+    }
+  },
+  dev: {
+    '/api/': {
+      // 要代理的地址
+      target: 'http:api.monday.lc',
+      changeOrigin: true,
+      pathRewrite: { '^/api' : '' },
+    }
+  }
 };
