@@ -2,17 +2,25 @@
 /* eslint-disable */
 import { request } from '@umijs/max';
 
-/** 获取用户token令牌 POST /api/common/token */
+/** 获取用户token令牌 POST /api/admin/tokens */
 export async function getToken(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.getTokenParams,
+  body: API.getTokenParams,
   options?: { [key: string]: any },
 ) {
-  return request<{ data?: API.TokenInfo }>('/api/admin/token', {
+  return request<{ data?: API.TokenInfo }>('/api/admin/tokens', {
     method: 'POST',
-    params: {
-      ...params,
+    headers: {
+      'Content-Type': 'application/json',
     },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 删除用户token令牌 DELETE /api/admin/tokens */
+export async function deleteToken(options?: { [key: string]: any }) {
+  return request<any>('/api/admin/tokens', {
+    method: 'DELETE',
     ...(options || {}),
   });
 }

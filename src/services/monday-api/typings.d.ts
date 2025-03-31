@@ -20,13 +20,6 @@ declare namespace API {
     ''?: any;
   };
 
-  type getTokenParams = {
-    /** 邮箱 */
-    email: string;
-    /** 密码 */
-    password: string;
-  };
-
   type MerchantAdminList =
     // #/components/schemas/MerchantAdminProps
     MerchantAdminProps & {
@@ -84,6 +77,13 @@ declare namespace API {
     name?: string;
   };
 
+  type  getTokenParams = {
+    /** 用户名 */
+    username: string;
+    /** 密码 */
+    password: string;
+  };
+
   type TokenInfo =
     // #/components/schemas/TokenProps
     TokenProps & {
@@ -92,12 +92,25 @@ declare namespace API {
 
   type TokenProps = {
     /** token */
-    token?: string;
+    token: string;
     /** token有效期 */
     expires_in?: number;
   };
 
   type updateMerchantAdminParams = {
     ''?: any;
+  };
+
+  type UserInfo =
+    // #/components/schemas/UserProps
+    UserProps;
+
+  type UserProps = {
+    /** 用户ID */
+    id?: number;
+    /** 用户名 */
+    name?: string;
+    /** 邮箱 */
+    email?: string;
   };
 }

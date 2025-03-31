@@ -4,7 +4,9 @@
 // API 唯一标识：
 import * as merchantAdmin from './merchantAdmin';
 import * as token from './token';
+import * as user from './user';
 export default {
   merchantAdmin,
   token,
+  user,
 };

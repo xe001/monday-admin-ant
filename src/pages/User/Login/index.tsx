@@ -11,9 +11,9 @@ import {
 } from '@ant-design/pro-components';
 import { useEmotionCss } from '@ant-design/use-emotion-css';
 import { FormattedMessage, history, SelectLang, useIntl, useModel, Helmet } from '@umijs/max';
-import { Alert, message, Tabs } from 'antd';
+import { message, Tabs } from 'antd';
 import Settings from '../../../../config/defaultSettings';
-import React, { useState } from 'react';
+import React,{ useState} from 'react';
 import { flushSync } from 'react-dom';
 
 const Lang = () => {
@@ -38,23 +38,11 @@ const Lang = () => {
   );
 };
 
-const LoginMessage: React.FC<{
-  content: string;
-}> = ({ content }) => {
-  return (
-    <Alert
-      style={{
-        marginBottom: 24,
-      }}
-      message={content}
-      type="error"
-      showIcon
-    />
-  );
-};
-
 const Login: React.FC = () => {
   const { initialState, setInitialState } = useModel('@@initialState');
+  const [token, setToken] = useState<string | null>(() => {
+    return localStorage.getItem('authToken');
+  });
 
   const containerClassName = useEmotionCss(() => {
     return {
@@ -85,8 +73,11 @@ const Login: React.FC = () => {
   const handleSubmit = async (values: API.getTokenParams) => {
     try {
       // 登录
-      const msg = await getToken({ ...values });
-      if (msg.data) {
+      const response = await getToken({ ...values });
+      if (response.data) {
+        const receivedToken = response.data.token;
+        localStorage.setItem('token', receivedToken);
+        setToken(receivedToken);
         const defaultLoginSuccessMessage = intl.formatMessage({
           id: 'pages.login.success',
           defaultMessage: '登录成功！',
@@ -97,7 +88,7 @@ const Login: React.FC = () => {
         history.push(urlParams.get('redirect') || '/');
         return;
       }
-      console.log(msg);
+      console.log(response);
       // 如果失败去设置用户错误信息
     } catch (error) {
       const defaultLoginFailureMessage = intl.formatMessage({
@@ -137,6 +128,8 @@ const Login: React.FC = () => {
           subTitle={intl.formatMessage({ id: 'pages.layouts.userLayout.title' })}
           initialValues={{
             autoLogin: true,
+            username: 'xe001@qq.com',
+            password: 'password',
           }}
           onFinish={async (values) => {
             await handleSubmit(values as API.getTokenParams);
@@ -154,15 +147,6 @@ const Login: React.FC = () => {
               },
             ]}
           />
-
-          {(
-            <LoginMessage
-              content={intl.formatMessage({
-                id: 'pages.login.accountLogin.errorMessage',
-                defaultMessage: '账户或密码错误',
-              })}
-            />
-          )}
           {(
             <>
               <ProFormText
@@ -186,6 +170,7 @@ const Login: React.FC = () => {
                     ),
                   },
                 ]}
+
               />
               <ProFormText.Password
                 name="password"
